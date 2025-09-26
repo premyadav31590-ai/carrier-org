@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Career Guide</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --light: #f9f9f9;
+            --dark: #333;
+            --gray: #ecf0f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--gray);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.5rem;
+            color: var(--secondary);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        section {
+            display: none;
+            padding: 2rem 0;
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .flow-step {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            margin: 1rem 0;
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .flow-step:after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background-color: var(--primary);
+        }
+        
+        .flow-step:last-child:after {
+            display: none;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .resource-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .resource-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .resource-type {
+            display: inline-block;
+            background-color: var(--gray);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .resource-link {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .resource-link:hover {
+            background-color: #27ae60;
+        }
+        
+        .career-path {
+            margin-bottom: 2rem;
+        }
+        
+        .path-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .path-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--gray);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+        
+        .highlight {
+            background-color: #fff9c4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Student Career Guide</h1>
+            <p>Your pathway to a successful future</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="nav-container">
+            <div class="nav-item active" data-target="home">Home</div>
+            <div class="nav-item" data-target="career-paths">Career Paths</div>
+            <div class="nav-item" data-target="exams">Key Exams</div>
+            <div class="nav-item" data-target="scholarships">Scholarships</div>
+            <div class="nav-item" data-target="resources">Resources</div>
+            <div class="nav-item" data-target="blogs">Blogs & Articles</div>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <section id="home" class="active">
+            <h2>Welcome to Your Career Journey</h2>
+            <p>This interactive guide will help you explore various career options, understand required qualifications, and discover resources to support your journey.</p>
+            
+            <div class="flowchart">
+                <div class="flow-step">Self-Assessment & Career Exploration</div>
+                <div class="flow-step">Identify Your Interests & Strengths</div>
+                <div class="flow-step">Research Career Options</div>
+                <div class="flow-step">Plan Your Education Path</div>
+                <div class="flow-step">Prepare for Exams & Applications</div>
+                <div class="flow-step">Launch Your Career</div>
+            </div>
+            
+            <h3>Quick Start</h3>
+            <div class="resources-grid">
+                <div class="card">
+                    <h4>Career Assessment Tools</h4>
+                    <p>Take online assessments to discover careers that match your personality and interests.</p>
+                    <a href="#" class="resource-link" data-target="resources">Explore Tools</a>
+                </div>
+                <div class="card">
+                    <h4>Popular Career Paths</h4>
+                    <p>Explore high-demand fields like Engineering, Medicine, Management, and more.</p>
+                    <a href="#" class="resource-link" data-target="career-paths">View Paths</a>
+                </div>
+                <div class="card">
+                    <h4>Scholarship Opportunities</h4>
+                    <p>Find financial support for your education through various scholarship programs.</p>
+                    <a href="#" class="resource-link" data-target="scholarships">Find Scholarships</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="career-paths">
+            <h2>Explore Career Paths</h2>
+            <p>Discover various career options, their requirements, and future prospects.</p>
+            
+            <input type="text" class="search-box" placeholder="Search career paths..." id="career-search">
+            
+            <div id="career-list">
+                <!-- Career paths will be dynamically inserted here -->
+            </div>
+        </section>
+        
+        <section id="exams">
+            <h2>Key Exams & Qualifications</h2>
+            <p>Information about important examinations for different career paths.</p>
+            
+            <input type="text" class="search-box" placeholder="Search exams..." id="exam-search">
+            
+            <div id="exam-list">
+                <!-- Exams will be dynamically inserted here -->
+            </div>
+        </section>
+        
+        <section id="scholarships">
+            <h2>Scholarship Opportunities</h2>
+            <p>Financial support programs to help you achieve your educational goals.</p>
+            
+            <input type="text" class="search-box" placeholder="Search scholarships..." id="scholarship-search">
+            
+            <div id="scholarship-list">
+                <!-- Scholarships will be dynamically inserted here -->
+            </div>
+        </section>
+        
+        <section id="resources">
+            <h2>Career Guidance Resources</h2>
+            <p>Platforms and organizations that offer career counseling and support services.</p>
+            
+            <div class="resources-grid" id="resources-list">
+                <!-- Resources will be dynamically inserted here -->
+            </div>
+        </section>
+        
+        <section id="blogs">
+            <h2>Blogs & Articles</h2>
+            <p>Read insights and advice from career experts and counselors.</p>
+            
+            <div class="resources-grid" id="blogs-list">
+                <!-- Blogs will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Student Career Guide &copy; 2023 | Empowering students to make informed career decisions</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all nav items
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // Add active class to clicked nav item
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.querySelectorAll('section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target section
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+        
+        // Resource link navigation
+        document.querySelectorAll('.resource-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = this.getAttribute('data-target');
+                
+                // Update navigation
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                    if (nav.getAttribute('data-target') === target) {
+                        nav.classList.add('active');
+                    }
+                });
+                
+                // Show target section
+                document.querySelectorAll('section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(target).classList.add('active');
+            });
+        });
+        
+        // Career Paths Data
+        const careerPaths = [
+            {
+                name: "Engineering",
+                exams: "JEE Main, JEE Advanced, GATE",
+                scope: "Strong job growth in IT, manufacturing, infrastructure, AI, R&D sectors.",
+                description: "Engineering offers diverse opportunities in technology, innovation, and infrastructure development."
+            },
+            {
+                name: "Medicine & Healthcare",
+                exams: "NEET, AIIMS Entrance",
+                scope: "Growing demand for doctors, specialists, medical researchers, public health roles.",
+                description: "A rewarding career path focused on healthcare, patient treatment, and medical research."
+            },
+            {
+                name: "Civil Services",
+                exams: "UPSC CSE",
+                scope: "Influential roles in administration, diplomacy, public policy.",
+                description: "Opportunities to serve the nation through administrative and policy-making positions."
+            },
+            {
+                name: "Banking & Finance",
+                exams: "IBPS, SBI PO, CA",
+                scope: "Expanding financial sector, fintech innovations, investment banking roles.",
+                description: "Career paths in banking, financial services, accounting, and investment management."
+            },
+            {
+                name: "Management",
+                exams: "CAT, XAT, MAT",
+                scope: "Leadership roles in business, entrepreneurship, consultancies, marketing, HR.",
+                description: "Develop leadership skills for business management, strategy, and organizational development."
+            },
+            {
+                name: "Law",
+                exams: "CLAT, AILET, LSAT",
+                scope: "Legal practice, judiciary, corporate law, compliance, international law.",
+                description: "Pursue careers in litigation, corporate law, judiciary, or legal advisory services."
+            },
+            {
+                name: "Defence Services",
+                exams: "NDA, CDS",
+                scope: "Military careers with leadership, technical, and strategic roles.",
+                description: "Serve the nation through careers in the Army, Navy, or Air Force."
+            },
+            {
+                name: "Teaching & Research",
+                exams: "NET, CTET, GATE",
+                scope: "Academic careers in schools, colleges, universities, and research institutions.",
+                description: "Opportunities in education, academic research, and knowledge dissemination."
+            }
+        ];
+        
+        // Exams Data
+        const exams = [
+            {
+                name: "Civil Services Examination (CSE)",
+                eligibility: "Graduate, 21-32 years",
+                field: "Civil Services (IAS, IPS, IFS)",
+                scope: "High governmental positions with policymaking, administration. Prestigious career with job security.",
+                link: "https://www.upsc.gov.in"
+            },
+            {
+                name: "Joint Entrance Examination (JEE)",
+                eligibility: "12th Science",
+                field: "Engineering",
+                scope: "Admission to IITs, NITs, IIITs. Careers in engineering, research, tech innovation.",
+                link: "https://jeemain.nta.nic.in"
+            },
+            {
+                name: "NEET (National Eligibility cum Entrance Test)",
+                eligibility: "12th Science (PCB)",
+                field: "Medical (MBBS, BDS)",
+                scope: "Medical professions including doctors, dentists with wide job availability in hospitals and research.",
+                link: "https://ntaneet.nic.in"
+            },
+            {
+                name: "Graduate Aptitude Test in Engineering (GATE)",
+                eligibility: "B.E./B.Tech",
+                field: "Engineering/Research/Academia",
+                scope: "Postgraduate education eligibility, PSU recruitment, and research opportunities in engineering fields.",
+                link: "https://gate.iitkgp.ac.in"
+            },
+            {
+                name: "Staff Selection Commission (SSC) Exams (CGL, CHSL)",
+                eligibility: "12th/Graduate",
+                field: "Government jobs in various departments",
+                scope: "Recruitment to government ministries and departments at various levels. Stable government job careers.",
+                link: "https://ssc.nic.in"
+            },
+            {
+                name: "Institute of Banking Personnel Selection (IBPS) PO",
+                eligibility: "Graduate",
+                field: "Banking & Finance",
+                scope: "Bank officer roles (PO). Growing financial sector with good career prospects.",
+                link: "https://www.ibps.in"
+            },
+            {
+                name: "Common Admission Test (CAT)",
+                eligibility: "Graduate",
+                field: "Management/Business Administration",
+                scope: "Admission to IIMs and other top B-schools. Careers in management, consulting, marketing, finance.",
+                link: "https://iimcat.ac.in"
+            },
+            {
+                name: "National Defence Academy (NDA)",
+                eligibility: "12th Science/Commerce/Arts",
+                field: "Defence Forces",
+                scope: "Careers in Indian Army, Navy, Air Force. Prestigious defense careers with leadership growth.",
+                link: "https://joinindianarmy.nic.in"
+            },
+            {
+                name: "Common Law Admission Test (CLAT)",
+                eligibility: "12th",
+                field: "Law",
+                scope: "Entrance to National Law Universities. Careers as lawyers, judges, legal advisors, corporate law.",
+                link: "https://clat.ac.in"
+            },
+            {
+                name: "Chartered Accountancy (CA)",
+                eligibility: "12th/Graduate",
+                field: "Finance and Accounting",
+                scope: "High demand in auditing, taxation, financial consultancy, corporate finance roles.",
+                link: "https://www.icai.org"
+            }
+        ];
+        
+        // Scholarships Data
+        const scholarships = [
+            {
+                name: "Reliance Foundation Undergraduate Scholarship",
+                field: "Multi-disciplinary",
+                benefits: "Up to ₹2 lakhs, merit-based scholarships with mentorship and alumni support",
+                link: "https://www.scholarships.reliancefoundation.org/UG_Scholarship.aspx"
+            },
+            {
+                name: "Swami Dayanand Education Foundation Merit-cum-Means",
+                field: "Engineering, Medicine",
+                benefits: "Up to ₹50,000 per year for B.Tech/MBBS students from economically weaker backgrounds",
+                link: "https://www.swamidayanand.org/scholarship-india"
+            },
+            {
+                name: "Bhavishya Jyoti Scholarship by NIIT",
+                field: "IT & New Age Careers",
+                benefits: "Fee waivers up to ₹60,000 for meritorious students in IT and digital career programs",
+                link: "https://www.niit.com/india/press-release/niit-announces-24th-bhavishya-jyoti-scholarship-indias-most-significant-it-new-age-careers-scholarship-program/"
+            },
+            {
+                name: "North South Foundation Scholarship",
+                field: "Engineering, Medicine",
+                benefits: "Up to ₹25,000 for students with family income < ₹90,000, supporting continued studies",
+                link: "https://www.buddy4study.com/article/scholarships-for-engineering-students"
+            },
+            {
+                name: "NEST Senior Medical Scholarship",
+                field: "Medical",
+                benefits: "Up to ₹50,000 for MBBS/BAMS/BHMS/BDS students based on scholarship test",
+                link: "https://unischolars.com/medicine-scholarships-to-study-in-india"
+            },
+            {
+                name: "IDFC FIRST Bank MBA Scholarship",
+                field: "Management",
+                benefits: "Up to ₹2,00,000 for full-time MBA students from families with income ≤ ₹6 lakhs",
+                link: "https://www.idfcfirstbank.com/csr-activities/educational-initiatives/mba-scholarship"
+            },
+            {
+                name: "Top Scholarships for Law Students",
+                field: "Law",
+                benefits: "Scholarships up to ₹20,000/year for UG/PG law students including reserved category benefits",
+                link: "https://thelegalvoice.in/top-scholarships-for-indian-law-students-in-2025/"
+            },
+            {
+                name: "Vikash Deep Foundation UPSC Scholarship",
+                field: "Civil Services Preparation",
+                benefits: "Financial aid and coaching support for UPSC aspirants from all social categories",
+                link: "https://www.vikashdeepfoundation.org/upsc-scholarship/"
+            },
+            {
+                name: "Hyundai HOPE Scholarship",
+                field: "UPSC, PSC Exams",
+                benefits: "Scholarship for underprivileged students preparing for civil service exams in several Indian states",
+                link: "https://hyundai.scholarsbox.in"
+            }
+        ];
+        
+        // Resources Data
+        const resources = [
+            {
+                name: "National Career Service (NCS)",
+                type: "Government",
+                description: "National portal for career counseling, job matching, vocational guidance, and skill development",
+                link: "https://www.ncs.gov.in"
+            },
+            {
+                name: "Skill India Digital Hub (SIDH)",
+                type: "Government",
+                description: "AI-powered career guidance, skills mapping, and job-linked training programs",
+                link: "https://www.skillindiadigital.gov.in/wizard/career-counseling"
+            },
+            {
+                name: "Mindler",
+                type: "Private",
+                description: "Online platform for career assessments, guidance, and personalized career reports",
+                link: "https://www.mindler.com"
+            },
+            {
+                name: "Edumilestones",
+                type: "Private",
+                description: "5-dimensional career guidance with psychometric assessments and expert counselors",
+                link: "https://www.edumilestones.com"
+            },
+            {
+                name: "Dheya",
+                type: "Private",
+                description: "Mentorship, counseling, and holistic career planning for students and professionals",
+                link: "https://www.dheya.com"
+            },
+            {
+                name: "Antarang Foundation",
+                type: "NGO",
+                description: "Career awareness and workplace readiness programs for underserved youth",
+                link: "https://antarangfoundation.org"
+            },
+            {
+                name: "Youth India Foundation",
+                type: "NGO",
+                description: "Scholarships, career counseling, and livelihood support for youth from low-income backgrounds",
+                link: "https://www.youthindiafoundation.com"
+            },
+            {
+                name: "CareerGuide.com",
+                type: "Private",
+                description: "Comprehensive platform for career tests, counseling, and up-to-date career resources",
+                link: "https://www.careerguide.com"
+            },
+            {
+                name: "ETASHA Society",
+                type: "NGO",
+                description: "Career skills and life skills support for marginalized adolescents",
+                link: "https://www.etashasociety.org/adolescents/"
+            },
+            {
+                name: "Magic Bus India Foundation",
+                type: "NGO",
+                description: "Childhood to livelihood guidance, life skills, and employability programs",
+                link: "http://www.magicbus.org"
+            }
+        ];
+        
+        // Blogs Data
+        const blogs = [
+            {
+                name: "Set My Career",
+                type: "Blog",
+                description: "Blogs on top career opportunities, career growth, high-paying jobs in India and abroad",
+                link: "https://setmycareer.com/blog.php"
+            },
+            {
+                name: "Global Career Counsellor",
+                type: "Blog",
+                description: "Career counselling, career guidance programs, and career opportunities insights",
+                link: "https://www.globalcareercounsellor.com/blog/"
+            },
+            {
+                name: "ProTeen",
+                type: "Blog",
+                description: "Career counseling blogs aiming at career clarity for Indian students",
+                link: "https://www.proteen.com/category/blog/"
+            },
+            {
+                name: "Edumilestones",
+                type: "Blog",
+                description: "Systematic career guidance process explained by expert counselors",
+                link: "https://www.edumilestones.com/blog/"
+            },
+            {
+                name: "Silicon India",
+                type: "Blog",
+                description: "One of the top blogs offering career advice and industry insights",
+                link: "https://confluencr.com/top-10-indian-blogs-offering-career-advice/"
+            },
+            {
+                name: "UpGrad",
+                type: "Blog",
+                description: "Benefits, types, and fees for career counseling in India with actionable tips",
+                link: "https://www.upgrad.com/blog/career-counselling-for-students-how-to-get-career-guidance/"
+            },
+            {
+                name: "International Youth Foundation (IYF)",
+                type: "Literature PDF",
+                description: "Detailed report on the importance of career guidance and youth career programs globally",
+                link: "https://iyfglobal.org/sites/default/files/GPYE_Career%20Guidance_0_6.pdf"
+            },
+            {
+                name: "NCERT - Career Information",
+                type: "Literature PDF",
+                description: "Educational guide on career information and its role in guidance and counseling at school level",
+                link: "https://ncert.nic.in/depfe/pdf/Modules/Module_5_DCGC.pdf"
+            },
+            {
+                name: "Positive Psychology",
+                type: "Article",
+                description: "Scientific career counseling interventions and techniques for clients",
+                link: "https://positivepsychology.com/career-counseling-sessions/"
+            },
+            {
+                name: "Book Your Career (BYC)",
+                type: "Blog",
+                description: "Expert articles on career planning, overcoming distractions, and career trends",
+                link: "https://www.bookyourcareer.in/blog/"
+            }
+        ];
+        
+        // Render Career Paths
+        function renderCareerPaths(filter = '') {
+            const careerList = document.getElementById('career-list');
+            careerList.innerHTML = '';
+            
+            const filteredCareers = careerPaths.filter(career => 
+                career.name.toLowerCase().includes(filter.toLowerCase()) ||
+                career.exams.toLowerCase().includes(filter.toLowerCase()) ||
+                career.scope.toLowerCase().includes(filter.toLowerCase())
+            );
+            
+            filteredCareers.forEach(career => {
+                const careerElement = document.createElement('div');
+                careerElement.className = 'career-path card';
+                careerElement.innerHTML = `
+                    <h3>${career.name}</h3>
+                    <p>${career.description}</p>
+                    <div class="path-details">
+                        <div>
+                            <h4>Key Exams/Qualifications</h4>
+                            <p>${career.exams}</p>
+                        </div>
+                        <div>
+                            <h4>Career Scope</h4>
+                            <p>${career.scope}</p>
+                        </div>
+                    </div>
+                `;
+                careerList.appendChild(careerElement);
+            });
+        }
+        
+        // Render Exams
+        function renderExams(filter = '') {
+            const examList = document.getElementById('exam-list');
+            examList.innerHTML = '';
+            
+            const filteredExams = exams.filter(exam => 
+                exam.name.toLowerCase().includes(filter.toLowerCase()) ||
+                exam.field.toLowerCase().includes(filter.toLowerCase()) ||
+                exam.scope.toLowerCase().includes(filter.toLowerCase())
+            );
+            
+            filteredExams.forEach(exam => {
+                const examElement = document.createElement('div');
+                examElement.className = 'card';
+                examElement.innerHTML = `
+                    <h3>${exam.name}</h3>
+                    <p><span class="highlight">Eligibility:</span> ${exam.eligibility}</p>
+                    <p><span class="highlight">Career Path:</span> ${exam.field}</p>
+                    <p>${exam.scope}</p>
+                    <a href="${exam.link}" target="_blank" class="resource-link">Official Website</a>
+                `;
+                examList.appendChild(examElement);
+            });
+        }
+        
+        // Render Scholarships
+        function renderScholarships(filter = '') {
+            const scholarshipList = document.getElementById('scholarship-list');
+            scholarshipList.innerHTML = '';
+            
+            const filteredScholarships = scholarships.filter(scholarship => 
+                scholarship.name.toLowerCase().includes(filter.toLowerCase()) ||
+                scholarship.field.toLowerCase().includes(filter.toLowerCase()) ||
+                scholarship.benefits.toLowerCase().includes(filter.toLowerCase())
+            );
+            
+            filteredScholarships.forEach(scholarship => {
+                const scholarshipElement = document.createElement('div');
+                scholarshipElement.className = 'card';
+                scholarshipElement.innerHTML = `
+                    <h3>${scholarship.name}</h3>
+                    <p><span class="highlight">Field:</span> ${scholarship.field}</p>
+                    <p>${scholarship.benefits}</p>
+                    <a href="${scholarship.link}" target="_blank" class="resource-link">Learn More</a>
+                `;
+                scholarshipList.appendChild(scholarshipElement);
+            });
+        }
+        
+        // Render Resources
+        function renderResources() {
+            const resourcesList = document.getElementById('resources-list');
+            resourcesList.innerHTML = '';
+            
+            resources.forEach(resource => {
+                const resourceElement = document.createElement('div');
+                resourceElement.className = 'resource-card';
+                resourceElement.innerHTML = `
+                    <span class="resource-type">${resource.type}</span>
+                    <h4>${resource.name}</h4>
+                    <p>${resource.description}</p>
+                    <a href="${resource.link}" target="_blank" class="resource-link">Visit Website</a>
+                `;
+                resourcesList.appendChild(resourceElement);
+            });
+        }
+        
+        // Render Blogs
+        function renderBlogs() {
+            const blogsList = document.getElementById('blogs-list');
+            blogsList.innerHTML = '';
+            
+            blogs.forEach(blog => {
+                const blogElement = document.createElement('div');
+                blogElement.className = 'resource-card';
+                blogElement.innerHTML = `
+                    <span class="resource-type">${blog.type}</span>
+                    <h4>${blog.name}</h4>
+                    <p>${blog.description}</p>
+                    <a href="${blog.link}" target="_blank" class="resource-link">Read More</a>
+                `;
+                blogsList.appendChild(blogElement);
+            });
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCareerPaths();
+            renderExams();
+            renderScholarships();
+            renderResources();
+            renderBlogs();
+            
+            // Search functionality for career paths
+            document.getElementById('career-search').addEventListener('input', function(e) {
+                renderCareerPaths(e.target.value);
+            });
+            
+            // Search functionality for exams
+            document.getElementById('exam-search').addEventListener('input', function(e) {
+                renderExams(e.target.value);
+            });
+            
+            // Search functionality for scholarships
+            document.getElementById('scholarship-search').addEventListener('input', function(e) {
+                renderScholarships(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
